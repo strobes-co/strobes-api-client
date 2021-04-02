@@ -19,5 +19,4 @@ class LoginFailure(Exception):
 
 
 class ResourceException(Exception):
-    def __str__(self):
-        return "Unexpected response returned when deserialing data."
+    pass

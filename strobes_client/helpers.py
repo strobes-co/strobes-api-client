@@ -14,4 +14,4 @@ def get_jwt_token(url: str, email: str, password: str) -> str:
 def check_keys(data: dict, keys: list):
     for k in keys:
         if k not in data:
-            raise ResourceException
+            raise ResourceException(f'{k} not availabe')
