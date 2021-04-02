@@ -37,17 +37,36 @@ resp.results
 
 #### list_organizations
 
+**Expected**
+
 | Name  | Required | Default | Description |
 | ------------- | ------------- | ------------- | ------------- |
 | page  | No  | 1 | The page number for organization list|
 
+**Returns**
+
+```
+List[OrganizationResource]
+```
+
+
 #### get_organization
+
+**Expected**
 
 | Name  | Required | Default | Description |
 | ------------- | ------------- | ------------- | ------------- |
 | org_id  | Yes  | | The organization UUID |
 
+**Returns**
+
+```
+OrganizationResource
+```
+
 #### get_assets
+
+**Expected**
 
 | Name  | Required | Default | Description |
 | ------------- | ------------- | ------------- | ------------- |
@@ -55,14 +74,30 @@ resp.results
 | page  | No  |1 | The page number for asset list |
 | asset_type  | No  |[] | The type of assets you want to filter by. For example, asset_type=[1,2]  |
 
+**Returns**
+
+```
+List[AssetResource]
+```
+
 #### get_asset
+
+**Expected**
 
 | Name  | Required | Default | Description |
 | ------------- | ------------- | ------------- | ------------- |
 | org_id  | Yes  | | The organization UUID |
 | asset_id  | Yes  || The asset ID |
 
-#### Update Asset
+**Returns**
+
+```
+AssetResource
+```
+
+#### update_asset
+
+**Expected**
 
 | Name  | Required | Default | Description |
 | ------------- | ------------- | ------------- | ------------- |
@@ -74,6 +109,12 @@ resp.results
 | ipaddress  | No  || The ipaddress of the asset  |
 | sensitivity  | No  || The business sensitivity of the asset  |
 | exposure  | No  || The exposure of the asset  |
+
+**Returns**
+
+```
+OrganizationResource
+```
 
 # :hammer: Resources
 
