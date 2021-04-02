@@ -35,7 +35,7 @@ resp.results
 
 # :wrench: APIs
 
-#### list_organizations
+### list_organizations
 
 **Expected**
 
@@ -50,7 +50,7 @@ List[OrganizationResource]
 ```
 
 
-#### get_organization
+### get_organization
 
 **Expected**
 
@@ -64,7 +64,7 @@ List[OrganizationResource]
 OrganizationResource
 ```
 
-#### get_assets
+### get_assets
 
 **Expected**
 
@@ -80,7 +80,7 @@ OrganizationResource
 List[AssetResource]
 ```
 
-#### get_asset
+### get_asset
 
 **Expected**
 
@@ -95,7 +95,7 @@ List[AssetResource]
 AssetResource
 ```
 
-#### update_asset
+### update_asset
 
 **Expected**
 
@@ -118,14 +118,14 @@ OrganizationResource
 
 # :hammer: Resources
 
-#### OrganizationResource
+### OrganizationResource
 
 | Name  | Description |
 | ------------- | ------------- |
 | id  | UUID of organization  |
 | name  | Name of the organization  |
 
-#### OrganizationListResource
+### OrganizationListResource
 
 | Name  | Description |
 | ------------- | ------------- |
@@ -134,7 +134,7 @@ OrganizationResource
 
 # :flashlight: Types
 
-### AssetType
+## AssetType
 | ID  | Name |
 | ------------- | ------------- |
 | 1  | web |
@@ -143,7 +143,7 @@ OrganizationResource
 | 4 | Cloud |
 | 5  | Others |
 
-#### SensitivityType
+### SensitivityType
 | ID  | Name |
 | ------------- | ------------- |
 | None | 0 |
@@ -151,7 +151,7 @@ OrganizationResource
 | 2  | Medium |
 | 3 | High |
 
-#### AssetExposureType
+### AssetExposureType
 | ID  | Name |
 | ------------- | ------------- |
 | 1 | Public |
