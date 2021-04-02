@@ -6,7 +6,7 @@ Strobes API client is an API wrapper written in python that helps you to integra
 v0.1
 ```
 
-# Using the client
+# :mortar_board: Using the client
 
 - Install the client
 ```
@@ -33,7 +33,7 @@ resp.results
 [<strobes_client.resources.OrganizationResource object at 0x109aee400>, <strobes_client.resources.OrganizationResource object at 0x109aee3a0>, <strobes_client.resources.OrganizationResource object at 0x109b240a0>, <strobes_client.resources.OrganizationResource object at 0x109b240d0>]
 ```
 
-# APIs
+# :wrench: APIs
 
 #### list_organizations
 
@@ -75,7 +75,7 @@ resp.results
 | sensitivity  | No  || The business sensitivity of the asset  |
 | exposure  | No  || The exposure of the asset  |
 
-# Resources
+# :hammer: Resources
 
 #### OrganizationResource
 
@@ -91,7 +91,7 @@ resp.results
 | page  | Page number of the current results |
 | results  | List of <OrganizationResource> |
 
-# Types
+# :flashlight: Types
 
 ### AssetType
 | ID  | Name |
