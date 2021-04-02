@@ -134,7 +134,7 @@ OrganizationResource
 
 # :flashlight: Types
 
-## AssetType
+### AssetType
 | ID  | Name |
 | ------------- | ------------- |
 | 1  | web |
