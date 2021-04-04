@@ -129,8 +129,8 @@ OrganizationResource
 
 | Name  | Description |
 | ------------- | ------------- |
-| page  | Page number of the current results |
-| results  | List of <OrganizationResource> |
+| count  | Total number of organizations for the current query |
+| results  | List of OrganizationResource |
 
 # :flashlight: Types
 

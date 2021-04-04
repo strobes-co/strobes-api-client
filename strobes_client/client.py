@@ -37,6 +37,9 @@ class StrobesClient(BaseClient):
             f"{str(asset_id)}/")
         return resources.AssetResource(r.json())
 
+    def create_asset(self, org_id: str) -> resources.AssetResource:
+        pass
+
     def update_asset(self, org_id: str, asset_id: int, name: str = None,
                      exposed: int = None, mac_address: str = None,
                      hostname: str = None, sensitivity: int = None,
