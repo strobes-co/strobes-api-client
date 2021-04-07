@@ -110,6 +110,12 @@ AssetResource
 | sensitivity  | No  || The business sensitivity of the asset  |
 | exposure  | No  || The exposure of the asset  |
 
+**Returns**
+
+```
+AssetResource
+```
+
 ### list_vulnerabilities
 
 **Expected**
@@ -124,6 +130,12 @@ AssetResource
 | cve  | No  |  | The cve you want to filter vulnerabilities by  |
 | assets  | No  | []| The asset IDs you want to filter vulnerabilities  |
 
+**Returns**
+
+```
+VulnerabilityListResource
+```
+
 ### get_vulnerability
 
 **Expected**
@@ -133,6 +145,12 @@ AssetResource
 | org_id  | Yes  | | The organization UUID |
 | asset_id  | Yes  || The asset ID |
 | vulnerability_id  | yes  || The vulnerability ID |
+
+**Returns**
+
+```
+VulnerabilityResource
+```
 
 
 ### update_vulnerability
@@ -150,7 +168,7 @@ AssetResource
 **Returns**
 
 ```
-AssetResource
+VulnerabilityResource
 ```
 
 # :hammer: Resources
