@@ -126,7 +126,6 @@ class VulnerabilityResource:
     severity: int = -1
     reported_by: str = ""
     due_date: str = ""
-    scanner_raw_response: dict = {}
     asset: Union[int, AssetResource] = -1
 
     def __init__(self, response_data={}, is_check_keys=False):
