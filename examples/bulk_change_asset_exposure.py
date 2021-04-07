@@ -1,6 +1,6 @@
 '''
-This example shows how to filter vulnerabilities in an organization by CVE 
-and update their state to patched
+This example shows how to fetch assets in an organization 
+and update their exposed flag to private
 '''
 
 from strobes_client.client import StrobesClient

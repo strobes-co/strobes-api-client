@@ -20,3 +20,8 @@ class LoginFailure(Exception):
 
 class ResourceException(Exception):
     pass
+
+
+class UnexpectedStatusCode(Exception):
+    def __str__(self):
+        return "response returned an unexpected status code other than 2xx"

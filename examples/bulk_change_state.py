@@ -14,14 +14,13 @@ s = StrobesClient("dev@wesecureapp.com", "a",
 organization_id = "802caa9a-ece9-4dfb-8b18-e2154319d3f5"
 
 '''
-Get list of assets
+Get list of vulnerabilities
 '''
 
 for p in range(1, 10):  # page 1 to 10
-    assets = s.list_assets(
-        org_id=organization_id, page=p)
-    for at in assets.results:
-        updated_asset = s.update_asset(
-            org_id=organization_id, asset_id=at.id,
-            exposed=2)
-        print(updated_asset.exposed)
+    vulnerabilities = s.list_vulerabilities(
+        org_id=organization_id, page=p, cve="CVE-2020-0909")
+    for v in vulnerabilities.results:
+        updated_vulnerability = s.update_vulnerability(
+            org_id=organization_id, asset_id=v.asset, vulnerability_id=v.id, state=2)
+        print(updated_vulnerability.state)

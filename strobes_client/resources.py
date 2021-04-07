@@ -1,6 +1,4 @@
-from typing import List
-# from strobes_client import enums
-# from strobes_client.exceptions import ResourceException
+from typing import List, Union
 from strobes_client.helpers import check_keys
 
 
@@ -48,7 +46,8 @@ class AssetInfoResource:
             if is_check_keys:
                 check_keys(response_data, keys)
             for k in keys:
-                to_deserialize[k] = response_data[k]
+                if k in response_data:
+                    to_deserialize[k] = response_data[k]
             self.__dict__ = to_deserialize
 
 
@@ -71,7 +70,8 @@ class AssetResource:
         to_deserialize = {}
         if is_check_keys:
             check_keys(response_data, keys)
-        to_deserialize["data"] = AssetInfoResource(response_data["data"])
+        to_deserialize["data"] = AssetInfoResource(
+            response_data["data"], is_check_keys=False)
 
         del response_data["data"]
         keys.remove('data')
@@ -92,6 +92,7 @@ class AssetListResource:
         to_deserialize["results"] = []
         for asset in response_data["results"]:
             to_deserialize["results"].append(AssetResource(asset))
+        to_deserialize["count"] = response_data["count"]
         self.__dict__ = to_deserialize
 
 
@@ -101,7 +102,7 @@ class VulnerabilityExtraInfoResource:
     cpe: str = ""
 
     def __init__(self, response_data={}, is_check_keys=False):
-        keys = ["os", "os", "port", "cpe"]
+        keys = ["os", "port", "cpe"]
         to_deserialize = {}
         if response_data:
             if is_check_keys:
@@ -125,22 +126,64 @@ class VulnerabilityResource:
     severity: int = -1
     reported_by: str = ""
     due_date: str = ""
-    extra_info: VulnerabilityExtraInfoResource = \
-        VulnerabilityExtraInfoResource()
+    scanner_raw_response: dict = {}
+    asset: Union[int, AssetResource] = -1
 
     def __init__(self, response_data={}, is_check_keys=False):
         keys = ["id", "title", "description", "steps_to_reproduce",
                 "state", "exploit_available", "patch_available", "cwe", "cvss",
-                "cve", "severity", "reported_by", "due_data"]
+                "cve", "severity", "reported_by", "due_date", "asset"]
         to_deserialize = {}
+
         if is_check_keys:
             check_keys(response_data, keys)
-        to_deserialize["results"] = []
-        for asset in response_data["results"]:
-            to_deserialize["results"].append(AssetResource(asset))
+        if type(response_data.get("asset")) != int:
+            response_data["asset"] = response_data["asset"]["id"]
+        for k in keys:
+            to_deserialize[k] = response_data[k]
         self.__dict__ = to_deserialize
 
 
 class VulnerabilityListResource:
     results: List[VulnerabilityResource] = []
     count: int = -1
+
+    def __init__(self, response_data={}, is_check_keys=False):
+        keys = ["results", "count"]
+        to_deserialize = {}
+        if is_check_keys:
+            check_keys(response_data, keys)
+        to_deserialize["results"] = []
+        for v in response_data["results"]:
+            to_deserialize["results"].append(VulnerabilityResource(v))
+        to_deserialize["count"] = response_data["count"]
+        self.__dict__ = to_deserialize
+
+
+class CVEResource:
+    id: int = -1
+    cve_id: str = ""
+    cvss: float = -1
+
+    def __init__(self, response_data={}, is_check_keys=False):
+        keys = ["id", "cve_id", "cvss"]
+        to_deserialize = {}
+        for k in keys:
+            to_deserialize[k] = response_data[k]
+        self.__dict__ = to_deserialize
+
+
+class CVEListResource:
+    results: List[CVEResource] = []
+    count: int = -1
+
+    def __init__(self, response_data={}, is_check_keys=False):
+        keys = ["results", "count"]
+        to_deserialize = {}
+        if is_check_keys:
+            check_keys(response_data, keys)
+        to_deserialize["results"] = []
+        for cve in response_data["results"]:
+            to_deserialize["results"].append(CVEResource(cve))
+        to_deserialize["count"] = response_data["count"]
+        self.__dict__ = to_deserialize

@@ -110,10 +110,47 @@ AssetResource
 | sensitivity  | No  || The business sensitivity of the asset  |
 | exposure  | No  || The exposure of the asset  |
 
+### list_vulnerabilities
+
+**Expected**
+
+| Name  | Required | Default | Description |
+| ------------- | ------------- | ------------- | ------------- |
+| org_id  | Yes  | | The organization UUID |
+| page  | No  |1 | The page number for asset list |
+| asset_type  | No  |[1,2,3,4] | The type of assets you want to filter by. For example, asset_type=[1,2,3,4]  |
+| state  | No  |[1,2,3,4] | The state of vulnerabilities you want to filter by. For example, asset_type=[1,2,4]  |
+| severity  | No  |[1,2,3,4,5] | The severity of vulnerabilities you want to filter by. For example, asset_type=[1,2,4,5]  |
+| cve  | No  |  | The cve you want to filter vulnerabilities by  |
+| assets  | No  | []| The asset IDs you want to filter vulnerabilities  |
+
+### get_vulnerability
+
+**Expected**
+
+| Name  | Required | Default | Description |
+| ------------- | ------------- | ------------- | ------------- |
+| org_id  | Yes  | | The organization UUID |
+| asset_id  | Yes  || The asset ID |
+| vulnerability_id  | yes  || The vulnerability ID |
+
+
+### update_vulnerability
+
+**Expected**
+
+| Name  | Required | Default | Description |
+| ------------- | ------------- | ------------- | ------------- |
+| org_id  | Yes  | | The organization UUID |
+| asset_id  | Yes  || The asset ID |
+| vulnerability_id  | yes  || The vulnerability ID |
+| state  | No  || The state of the vulnerability |
+| severity  | No  || The severity of the vulnerability  |
+
 **Returns**
 
 ```
-OrganizationResource
+AssetResource
 ```
 
 # :hammer: Resources
@@ -131,6 +168,65 @@ OrganizationResource
 | ------------- | ------------- |
 | count  | Total number of organizations for the current query |
 | results  | List of OrganizationResource |
+
+### AssetListResource
+
+| Name  | Description |
+| ------------- | ------------- |
+| count  | Total number of assets for the current query |
+| results  | List of AssetResource |
+
+### AssetResource
+
+| Name  | Description |
+| ------------- | ------------- |
+| id  | The ID of the asset |
+| name  | The name of the asset |
+| organization  | The organization ID of the asset |
+| exposed  | The exposed state of the asset AssetExposureType |
+| target  | The target the asset used for scanning |
+| type  | The type the asset AssetType |
+| cloud_type  | The cloud type of the asset |
+| linked_assets  | Assets linked with the requested asset |
+| data  | AssetInfoResource |
+
+### AssetInfoResource
+
+| Name  | Description |
+| ------------- | ------------- |
+| os  | The OS of the asset |
+| cpe  | The cpe of the asset |
+| netbios  | The netbios of the asset |
+| hostname  | The hostname of the asset |
+| ipaddress  | The ipaddress of the asset |
+| mac_address  | The mac_address of the asset |
+
+
+### VulnerabilityListResource
+
+| Name  | Description |
+| ------------- | ------------- |
+| count  | Total number of vulnerabilities for the current query |
+| results  | List of VulnerabilityResource |
+
+
+### VulnerabilityResource
+
+| Name  | Description |
+| ------------- | ------------- |
+| id  | The id of the vulnerability |
+| title  | The title of the vulnerability |
+| description  | The description of the vulnerability |
+| steps_to_reproduce  | The steps_to_reproduce of the vulnerability |
+| state  | VulnerabilityStateType |
+| patch_available  | if patch is avaialble |
+| exploit_available  | if exploit is available |
+| cwe  | the CWE list of the vulnerability |
+| cvss  | if cvss score of the vulnerability |
+| cve  | if cve list of the vulnerability |
+| severity  | VulnerabilitySeverityType |
+| asset  | the asset ID of the vulnerability |
+
 
 # :flashlight: Types
 
@@ -156,4 +252,22 @@ OrganizationResource
 | ------------- | ------------- |
 | 1 | Public |
 | 2 | Private |
+
+
+### VulnerabilitySeverityType
+| ID  | Name |
+| ------------- | ------------- |
+| 1 | info |
+| 2 | low |
+| 3 | medium |
+| 4 | high |
+| 5 | critical |
+
+### VulnerabilityStateType
+| ID  | Name |
+| ------------- | ------------- |
+| 1 | active |
+| 2 | resolved |
+| 3 | duplicate |
+| 4 | not_applicable |
 
