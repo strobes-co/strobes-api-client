@@ -237,7 +237,8 @@ VulnerabilityResource
 | description  | The description of the vulnerability |
 | steps_to_reproduce  | The steps_to_reproduce of the vulnerability |
 | state  | VulnerabilityStateType |
-| patch_available  | if patch is avaialble |
+| patch_available  | The mitigation of the vulnerability |
+| mitigation  | if patch is avaialble |
 | exploit_available  | if exploit is available |
 | cwe  | the CWE list of the vulnerability |
 | cvss  | if cvss score of the vulnerability |

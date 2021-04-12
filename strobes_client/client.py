@@ -87,13 +87,13 @@ class StrobesClient(BaseClient):
         check_status_code(r)
         return resources.AssetResource(r.json())
 
-    def list_vulerabilities(self, org_id: str,
-                            severity: List[int] = [1, 2, 3, 4, 5],
-                            state: List[int] = [1, 2, 3, 4],
-                            asset_type: List[int] = [1, 2, 3, 4],
-                            assets: List[int] = [],
-                            page: int = 1,
-                            cve: str = "") -> resources.VulnerabilityListResource:
+    def list_vulnerabilities(self, org_id: str,
+                             severity: List[int] = [1, 2, 3, 4, 5],
+                             state: List[int] = [1, 2, 3, 4],
+                             asset_type: List[int] = [1, 2, 3, 4],
+                             assets: List[int] = [],
+                             page: int = 1,
+                             cve: str = "") -> resources.VulnerabilityListResource:
         qs = "&"
         if len(asset_type):
             qs += "filter_by[]=asset_type&"

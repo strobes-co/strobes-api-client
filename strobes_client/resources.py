@@ -117,6 +117,7 @@ class VulnerabilityResource:
     title: str = ""
     description: str = ""
     steps_to_reproduce: str = ""
+    mitigation: str = ""
     state: int = -1
     exploit_available: bool = False
     patch_available: bool = False
@@ -130,7 +131,7 @@ class VulnerabilityResource:
 
     def __init__(self, response_data={}, is_check_keys=False):
         keys = ["id", "title", "description", "steps_to_reproduce",
-                "state", "exploit_available", "patch_available", "cwe", "cvss",
+                "state", "exploit_available", "patch_available", "mitigation", "cwe", "cvss",
                 "cve", "severity", "reported_by", "due_date", "asset"]
         to_deserialize = {}
 
