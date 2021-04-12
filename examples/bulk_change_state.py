@@ -18,7 +18,7 @@ Get list of vulnerabilities
 '''
 
 for p in range(1, 10):  # page 1 to 10
-    vulnerabilities = s.list_vulerabilities(
+    vulnerabilities = s.list_vulnerabilities(
         org_id=organization_id, page=p, cve="CVE-2020-0909")
     for v in vulnerabilities.results:
         updated_vulnerability = s.update_vulnerability(
