@@ -171,6 +171,25 @@ VulnerabilityResource
 VulnerabilityResource
 ```
 
+
+### update_vulnerability_tags
+
+**Expected**
+
+| Name  | Required | Default | Description |
+| ------------- | ------------- | ------------- | ------------- |
+| org_id  | Yes  | | The organization UUID |
+| asset_id  | Yes  || The asset ID |
+| vulnerability_id  | yes  || The vulnerability ID |
+| bug_tags  | yes  || List of tags |
+
+
+**Returns**
+
+```
+VulnerabilityResource
+```
+
 # :hammer: Resources
 
 ### OrganizationResource

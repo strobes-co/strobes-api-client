@@ -127,20 +127,24 @@ class VulnerabilityResource:
     severity: int = -1
     reported_by: str = ""
     due_date: str = ""
+    bug_tags: List[str] = []
     asset: Union[int, AssetResource] = -1
 
     def __init__(self, response_data={}, is_check_keys=False):
         keys = ["id", "title", "description", "steps_to_reproduce",
                 "state", "exploit_available", "patch_available", "mitigation", "cwe", "cvss",
-                "cve", "severity", "reported_by", "due_date", "asset"]
+                "cve", "severity", "reported_by", "due_date", "asset", "bug_tags"]
         to_deserialize = {}
-
+        optional = ["bug_tags"]
         if is_check_keys:
-            check_keys(response_data, keys)
+            check_keys(response_data, keys, optional=["bug_tags"])
         if type(response_data.get("asset")) != int:
             response_data["asset"] = response_data["asset"]["id"]
         for k in keys:
-            to_deserialize[k] = response_data[k]
+            if k not in response_data and k in optional:
+                to_deserialize[k] = ""
+            else:
+                to_deserialize[k] = response_data[k]
         self.__dict__ = to_deserialize
 
 

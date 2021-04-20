@@ -142,7 +142,7 @@ class StrobesClient(BaseClient):
             patch_data["severity"] = severity
         r = self.s.patch(
             f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/"
-            f"bugs/{str(vulnerability_id)}/", data=patch_data)
+            f"bugs/{str(vulnerability_id)}/", json=patch_data)
         check_status_code(r)
 
         return resources.VulnerabilityResource(r.json())
@@ -155,3 +155,16 @@ class StrobesClient(BaseClient):
         check_status_code(r)
 
         return resources.CVEListResource(r.json())
+
+    def update_vulnerability_tags(self, org_id: str, asset_id: int,
+                                  vulnerability_id: int, bug_tags: List[str]) \
+            -> resources.VulnerabilityResource:
+        r1 = self.get_vulnerability(org_id, asset_id, vulnerability_id)
+        for tag in r1.bug_tags:
+            bug_tags.append(tag["name"])
+
+        r2 = self.s.post(
+            f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/"
+            f"bugs/{str(vulnerability_id)}/tags/", json={"tag_list": bug_tags})
+        check_status_code(r2)
+        return r1
