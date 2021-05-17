@@ -125,7 +125,7 @@ AssetResource
 | org_id  | Yes  | | The organization UUID |
 | page  | No  |1 | The page number for asset list |
 | asset_type  | No  |[1,2,3,4] | The type of assets you want to filter by. For example, asset_type=[1,2,3,4]  |
-| state  | No  |[1,2,3,4] | The state of vulnerabilities you want to filter by. For example, asset_type=[1,2,4]  |
+| state  | No  |[0,1,2,3,4,5,6,7] | The state of vulnerabilities you want to filter by. For example, asset_type=[1,2,4]  |
 | severity  | No  |[1,2,3,4,5] | The severity of vulnerabilities you want to filter by. For example, asset_type=[1,2,4,5]  |
 | cve  | No  |  | The cve you want to filter vulnerabilities by  |
 | assets  | No  | []| The asset IDs you want to filter vulnerabilities  |
@@ -304,8 +304,12 @@ VulnerabilityResource
 ### VulnerabilityStateType
 | ID  | Name |
 | ------------- | ------------- |
+| 0 | new.   |
 | 1 | active |
 | 2 | resolved |
 | 3 | duplicate |
 | 4 | not_applicable |
+| 5 | committed |
+| 6 | accepted_risk |
+| 7 | wont_fix |
 
