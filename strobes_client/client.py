@@ -89,7 +89,7 @@ class StrobesClient(BaseClient):
 
     def list_vulnerabilities(self, org_id: str,
                              severity: List[int] = [1, 2, 3, 4, 5],
-                             state: List[int] = [1, 2, 3, 4],
+                             state: List[int] = [0, 1, 2, 3, 4, 5, 6, 7],
                              asset_type: List[int] = [1, 2, 3, 4],
                              assets: List[int] = [],
                              page: int = 1,
