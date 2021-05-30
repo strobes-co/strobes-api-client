@@ -132,8 +132,9 @@ class VulnerabilityResource:
 
     def __init__(self, response_data={}, is_check_keys=False):
         keys = ["id", "title", "description", "steps_to_reproduce",
-                "state", "exploit_available", "patch_available", "mitigation", "cwe", "cvss",
-                "cve", "severity", "reported_by", "due_date", "asset", "bug_tags"]
+                "state", "exploit_available", "patch_available", "mitigation", 
+                "cwe", "cvss", "cve", "severity", "reported_by", 
+                "due_date", "asset", "bug_tags"]
         to_deserialize = {}
         optional = ["bug_tags"]
         if is_check_keys:
@@ -191,3 +192,50 @@ class CVEListResource:
             to_deserialize["results"].append(CVEResource(cve))
         to_deserialize["count"] = response_data["count"]
         self.__dict__ = to_deserialize
+
+
+class ScanConfigResource:
+    id: int = 0
+    name: str = ""
+    connector_type: int = 0
+
+    def __init__(self, response_data={}, is_check_keys=False):
+        keys = ["id", "name", "connector_type"]
+        to_deserialize = {}
+        if is_check_keys:
+            check_keys(response_data, keys)
+        for k in keys:
+            to_deserialize[k] = response_data[k]
+        self.__dict__ = to_deserialize
+
+
+class ScanConfigListResource:
+    results: List[ScanConfigResource] = []
+
+    def __init__(self, response_data={}, is_check_keys=False):
+        keys = ["results"]
+        to_deserialize = {}
+        if is_check_keys:
+            check_keys(response_data, keys)
+        to_deserialize["results"] = []
+        for config in response_data:
+            to_deserialize["results"].append(ScanConfigResource(config))
+        self.__dict__ = to_deserialize
+
+
+class TaskResource:
+    id: int = 0
+    bug_stats: str = ""
+    status: int = 0
+    task_id: str = ""
+    logs: List[str] = []
+
+    def __init__(self, response_data={}, is_check_keys=False):
+        keys = ["id", "bug_stats", "status", "logs", "task_id"]
+        to_deserialize = {}
+        if is_check_keys:
+            check_keys(response_data, keys)
+        for k in keys:
+            to_deserialize[k] = response_data[k]
+        self.__dict__ = to_deserialize
+

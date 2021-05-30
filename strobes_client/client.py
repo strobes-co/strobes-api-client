@@ -5,8 +5,8 @@ from strobes_client.helpers import check_status_code
 
 
 class StrobesClient(BaseClient):
-    def __init__(self, *args):
-        super().__init__(*args)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def list_organizations(self, page: int = 1) -> \
             resources.OrganizationListResource:
@@ -167,4 +167,31 @@ class StrobesClient(BaseClient):
             f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/"
             f"bugs/{str(vulnerability_id)}/tags/", json={"tag_list": bug_tags})
         check_status_code(r2)
-        return r1
+        return resources.VulnerabilityResource(r2.json())
+
+    def get_scan_configs(self) -> resources.ScanConfigListResource:
+        r = self.s.get(f"{self.app_url}api/v1/cicd/configurations/")
+        check_status_code(r)
+        return resources.ScanConfigListResource(r.json())
+
+    def start_scan(self, config_id: int, target: str = None,
+                   target_list: List[str] = None) -> resources.TaskResource:
+        data = {}
+        data["configuration_id"] = config_id
+        if target:
+            data["target"] = target
+        if target_list:
+            data["target_list"] = target_list    
+
+        r = self.s.post(f"{self.app_url}api/v1/cicd/scan/", json=data)
+        check_status_code(r)
+        return resources.TaskResource(r.json())
+    
+    def get_scan_status(self, task_id: str) -> resources.TaskResource:
+        r = self.s.get(f"{self.app_url}api/v1/cicd/status/{task_id}/")
+        check_status_code(r)
+        return resources.TaskResource(r.json())
+
+
+
+    

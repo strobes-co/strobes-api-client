@@ -5,8 +5,8 @@ and update their state to patched
 
 from strobes_client.client import StrobesClient
 
-s = StrobesClient("dev@wesecureapp.com", "a",
-                  "qa1.strobes.wsa-apps.com", 80, "http")
+s = StrobesClient(email="dev@wesecureapp.com", password="a",
+                  host="qa1.strobes.wsa-apps.com", port=80, scheme="http")
 
 
 # Define organization ID
