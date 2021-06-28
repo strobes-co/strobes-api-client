@@ -174,10 +174,13 @@ class StrobesClient(BaseClient):
         check_status_code(r)
         return resources.ScanConfigListResource(r.json())
 
-    def start_scan(self, config_id: int, target: str = None,
+    def start_scan(self, config_id: int = None, config_name: str = None, target: str = None,
                    target_list: List[str] = None) -> resources.TaskResource:
         data = {}
-        data["configuration_id"] = config_id
+        if config_id:
+            data["configuration_id"] = config_id
+        else:
+            data["configuration_name"] = config_name
         if target:
             data["target"] = target
         if target_list:
