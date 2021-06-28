@@ -229,9 +229,10 @@ class TaskResource:
     status: int = 0
     task_id: str = ""
     logs: List[str] = []
+    organization_id: str = ""
 
     def __init__(self, response_data={}, is_check_keys=False):
-        keys = ["id", "bug_stats", "status", "logs", "task_id"]
+        keys = ["id", "organization_id", "bug_stats", "status", "logs", "task_id"]
         to_deserialize = {}
         if is_check_keys:
             check_keys(response_data, keys)
