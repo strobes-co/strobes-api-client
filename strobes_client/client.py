@@ -133,7 +133,7 @@ class StrobesClient(BaseClient):
 
     def update_vulnerability(self, org_id: str, asset_id: int,
                              vulnerability_id: int, state: int = None,
-                             severity: int = None, mitigation: str = None, steps_to_reproduce: str = None, title: str = None) \
+                             severity: int = None, mitigation: str = None, steps_to_reproduce: str = None, title: str = None, vulnerable_id:str=None, aws_category:str=None, region:str=None) \
             -> resources.VulnerabilityResource:
         patch_data: Dict[str, Union[str, int]] = {}
         if state:
@@ -146,6 +146,14 @@ class StrobesClient(BaseClient):
             patch_data["steps_to_reproduce"] = steps_to_reproduce
         if title:
             patch_data["title"] = title
+        if vulnerable_id or aws_category or region:
+            patch_data['cloud'] = {}
+            if vulnerable_id:
+                patch_data['cloud']['vulnerable_id'] = vulnerable_id
+            if aws_category:
+                patch_data['cloud']['aws_category'] = aws_category
+            if aws_category:
+                patch_data['cloud']['region'] = region
         r = self.s.patch(
             f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/"
             f"bugs/{str(vulnerability_id)}/", json=patch_data)
@@ -190,17 +198,13 @@ class StrobesClient(BaseClient):
         if target:
             data["target"] = target
         if target_list:
-            data["target_list"] = target_list    
+            data["target_list"] = target_list
 
         r = self.s.post(f"{self.app_url}api/v1/cicd/scan/", json=data)
         check_status_code(r)
         return resources.TaskResource(r.json())
-    
+
     def get_scan_status(self, task_id: str) -> resources.TaskResource:
         r = self.s.get(f"{self.app_url}api/v1/cicd/status/{task_id}/")
         check_status_code(r)
         return resources.TaskResource(r.json())
-
-
-
-    
