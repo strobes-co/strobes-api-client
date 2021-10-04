@@ -133,7 +133,7 @@ class StrobesClient(BaseClient):
 
     def update_vulnerability(self, org_id: str, asset_id: int,
                              vulnerability_id: int, state: int = None,
-                             severity: int = None, mitigation: str = None, steps_to_reproduce: str = None) \
+                             severity: int = None, mitigation: str = None, steps_to_reproduce: str = None, title: str = None) \
             -> resources.VulnerabilityResource:
         patch_data: Dict[str, Union[str, int]] = {}
         if state:
@@ -144,6 +144,8 @@ class StrobesClient(BaseClient):
             patch_data["mitigation"] = mitigation
         if steps_to_reproduce:
             patch_data["steps_to_reproduce"] = steps_to_reproduce
+        if title:
+            patch_data["title"] = title
         r = self.s.patch(
             f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/"
             f"bugs/{str(vulnerability_id)}/", json=patch_data)
