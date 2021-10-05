@@ -152,7 +152,7 @@ class StrobesClient(BaseClient):
                 patch_data['cloud']['vulnerable_id'] = vulnerable_id
             if aws_category:
                 patch_data['cloud']['aws_category'] = aws_category
-            if aws_category:
+            if region:
                 patch_data['cloud']['region'] = region
         r = self.s.patch(
             f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/"
