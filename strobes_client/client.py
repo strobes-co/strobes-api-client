@@ -1,8 +1,10 @@
 from typing import List, Dict, Union
+
+import requests
 from strobes_client.base_client import BaseClient
 from strobes_client import resources
 from strobes_client.helpers import check_status_code
-
+from strobes_client.enums import VulnerabilityTypeEnum
 
 class StrobesClient(BaseClient):
     def __init__(self, *args, **kwargs):
@@ -158,7 +160,6 @@ class StrobesClient(BaseClient):
             f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/"
             f"bugs/{str(vulnerability_id)}/", json=patch_data)
         check_status_code(r)
-
         return resources.VulnerabilityResource(r.json())
 
     def search_cve(self, org_id: str, search_term: str) \
@@ -208,3 +209,60 @@ class StrobesClient(BaseClient):
         r = self.s.get(f"{self.app_url}api/v1/cicd/status/{task_id}/")
         check_status_code(r)
         return resources.TaskResource(r.json())
+
+    def create_vulnerability(self, org_id: str, asset_id: int, vulnerability_type:str, 
+                             title: str, description: str, mitigation: str, steps_to_reproduce: str , severity: int, **kwargs
+                             ) \
+            -> resources.VulnerabilityResource:
+        post_data: Dict[str, Union[str, int]] = {}
+
+        post_data["title"] = title
+        post_data["description"] = description
+        post_data["mitigation"] = mitigation    
+        post_data["steps_to_reproduce"] = steps_to_reproduce    
+        post_data["severity"] = severity
+        post_data['cve_list'] = kwargs.get('cve_list', [])
+        post_data['cwe_list'] = kwargs.get('cwe_list', [])
+
+        if vulnerability_type == VulnerabilityTypeEnum.code.value:
+            post_data["bug_level"] = VulnerabilityTypeEnum.code_bug_level.value
+            post_data['code'] = {}
+            post_data['code']['vulnerable_code'] =  kwargs.get('vulnerable_code', None)
+            post_data['code']['start_line_number'] =  kwargs.get('start_line_number', None)
+            post_data['code']['column_number'] =  kwargs.get('column_number', None)
+            post_data['code']['file_name'] =  kwargs.get('file_name', None)
+            post_data['code']['end_line_number'] = kwargs.get('end_line_number', None)
+            post_data['code']['end_column'] =  kwargs.get('end_column', None)
+
+        if vulnerability_type == VulnerabilityTypeEnum.web.value:
+            post_data["bug_level"] = VulnerabilityTypeEnum.web_bug_level.value
+            post_data['web'] = {}
+            post_data['web']['request'] = kwargs.get('request', None)
+            post_data['web']['response'] = kwargs.get('response', None)
+            post_data['web']['affected_endpoints'] = kwargs.get('affected_endpoints', [])
+            
+        if vulnerability_type == VulnerabilityTypeEnum.network.value:
+            post_data["bug_level"] = VulnerabilityTypeEnum.network_bug_level.value
+            post_data['network'] = {}
+            post_data['network']['port_address'] = kwargs.get('port_address', None)
+            post_data['network']['cpe'] = kwargs.get('cpe', None)
+            post_data['network']['os'] = kwargs.get('os', None)
+
+        if vulnerability_type == VulnerabilityTypeEnum.cloud.value:
+            post_data["bug_level"] = VulnerabilityTypeEnum.cloud_bug_level.value
+            post_data['cloud'] = {}
+            post_data['cloud']['region'] = kwargs.get('region', None)
+            post_data['cloud']['vulnerable_id'] = kwargs.get('vulnerable_id', None)
+            post_data['cloud']['aws_category'] = kwargs.get('aws_category', None)
+
+        if vulnerability_type == VulnerabilityTypeEnum.package.value:
+            post_data["bug_level"] = VulnerabilityTypeEnum.package_bug_level.value
+            post_data['package'] = {}
+            post_data['package']['installed_version'] = kwargs.get('installed_version', None)
+            post_data['package']['fixed_version'] = kwargs.get('fixed_version', None)
+            post_data['package']['package_name'] = kwargs.get('package_name', None)
+            post_data['package']['affected_versions'] = kwargs.get('affected_versions', None)
+            
+        r = self.s.post(f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/bugs/", json=post_data)
+        check_status_code(r)
+        return resources.VulnerabilityResource(r.json())
