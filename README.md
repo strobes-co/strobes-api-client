@@ -210,6 +210,7 @@ VulnerabilityResource
 | affected_versions  | Yes  || The affected versions of the vulnerability  ||  package |
 | installed_version  | Yes  || The installed versions of the vulnerability  ||  package |
 | fixed_version  | Yes  || The fixed versions of the vulnerability  ||  package |
+
 **Returns**
 
 ```
