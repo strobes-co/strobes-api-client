@@ -171,7 +171,50 @@ VulnerabilityResource
 VulnerabilityResource
 ```
 
+### create_vulnerability
 
+**Expected**
+
+| Name  | Required | Default | Description |  Options | pass it if vulnerability type is |
+| ------------- | ------------- | ------------- | ------------- | ------------- |------------- |
+| org_id  | Yes  | | The organization UUID |
+| asset_id  | Yes  || The asset ID |
+| severity  | Yes  || The severity of the vulnerability  |
+| title  | Yes  || The title of the vulnerability  |
+| description  | Yes  || The description of the vulnerability  |
+| mitigation  | Yes  || The mitigation of the vulnerability  |
+| steps_to_reproduce  | Yes  || The steps to reproduce of the vulnerability  |
+| cve_list  | No  |[]| CVE's related to the vulnerability  |
+| cwe_list  | No  |[]| CWE's related to the vulnerability  |
+| vulnerability_type  | Yes  || The type of the vulnerability  |  web, code, network, cloud, package |
+|**Code  vulnerability**|
+| vulnerable_code  | Yes  || The vulnerable code of the vulnerability  ||  code |
+| file_name  | Yes  || The file name of the vulnerability  ||  code |
+| start_line_number  | No  || The start line number of the vulnerability  ||  code |
+| column_number  | No  || The column number of the vulnerability  ||  code |
+| end_line_number  | No  || The end line number of the vulnerability  ||  code |
+| end_column  | No  || The end column of the vulnerability  ||  code |
+|**Web  vulnerability**|
+| request  | Yes  || The http request of the vulnerability  ||  web |
+| response  | Yes  || The http response code of the vulnerability  ||  web |
+| affected_endpoints  | Yes  || The http affected endpoints  of the vulnerability  ||  web |
+|**Network  vulnerability**|
+| port_address  | Yes  || The port of the vulnerability  ||  network |
+| cpe  | No  || The CPE  of the vulnerability  ||  network |
+|**Cloud  vulnerability**|
+| region  | Yes  || The region of the vulnerability  ||  cloud |
+| vulnerable_id  | No  || The aws account id  of the vulnerability  ||  cloud |
+| aws_category  | No  || The aws category  of the vulnerability  ||  cloud |
+|**Package  vulnerability**|
+| package_name  | Yes  || The package name  of the vulnerability  ||  package |
+| affected_versions  | Yes  || The affected versions of the vulnerability  ||  package |
+| installed_version  | Yes  || The installed versions of the vulnerability  ||  package |
+| fixed_version  | Yes  || The fixed versions of the vulnerability  ||  package |
+**Returns**
+
+```
+VulnerabilityResource
+```
 ### update_vulnerability_tags
 
 **Expected**
