@@ -8,8 +8,7 @@ class BaseClient:
     def __init__(self, email: str = None, password: str = None,
                  host: str = RequestEnums.app_host.value, port: int = RequestEnums.app_port.value,
                  scheme: str = RequestEnums.app_scheme.value, api_token: str = None):
-        self.app_url = f"{scheme}://{host}:" \
-            f"{str(port)}/"
+        self.app_url = f"{scheme}://{host}:{port}/"
         if not api_token:
             if not email:
                 raise EmailException
