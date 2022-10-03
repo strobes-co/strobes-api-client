@@ -64,20 +64,30 @@ class AssetResource:
     data: AssetInfoResource = AssetInfoResource()
 
     def __init__(self, response_data={}, is_check_keys=False):
-        keys = ["id", "name", "organization", "sensitivity",
-                "exposed", "target", "cloud_type", "type", "linked_assets",
-                "data"]
+        keys = [
+            "id",
+            "name",
+            "organization",
+            "sensitivity",
+            "exposed",
+            "target",
+            "cloud_type",
+            "type",
+            "linked_assets",
+            "data",
+        ]
         to_deserialize = {}
         if is_check_keys:
             check_keys(response_data, keys)
-        to_deserialize["data"] = AssetInfoResource(
-            response_data["data"], is_check_keys=False)
-
-        del response_data["data"]
-        keys.remove('data')
-        for k in keys:
-            to_deserialize[k] = response_data[k]
-        self.__dict__ = to_deserialize
+        if response_data.get("data"):
+            to_deserialize["data"] = AssetInfoResource(
+                response_data["data"], is_check_keys=False
+            )
+            del response_data["data"]
+            keys.remove("data")
+            for k in keys:
+                to_deserialize[k] = response_data[k]
+            self.__dict__ = to_deserialize
 
 
 class AssetListResource:
@@ -131,10 +141,24 @@ class VulnerabilityResource:
     asset: Union[int, AssetResource] = -1
 
     def __init__(self, response_data={}, is_check_keys=False):
-        keys = ["id", "title", "description", "steps_to_reproduce",
-                "state", "exploit_available", "patch_available", "mitigation", 
-                "cwe", "cvss", "cve", "severity", "reported_by", 
-                "due_date", "asset", "bug_tags"]
+        keys = [
+            "id",
+            "title",
+            "description",
+            "steps_to_reproduce",
+            "state",
+            "exploit_available",
+            "patch_available",
+            "mitigation",
+            "cwe",
+            "cvss",
+            "cve",
+            "severity",
+            "reported_by",
+            "due_date",
+            "asset",
+            "bug_tags",
+        ]
         to_deserialize = {}
         optional = ["bug_tags"]
         if is_check_keys:
@@ -239,4 +263,3 @@ class TaskResource:
         for k in keys:
             to_deserialize[k] = response_data[k]
         self.__dict__ = to_deserialize
-

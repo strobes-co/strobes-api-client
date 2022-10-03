@@ -116,6 +116,38 @@ AssetResource
 AssetResource
 ```
 
+### create_asset
+
+**Expected**
+
+| Name  | Required | Default | Description |  Options | pass it if asset type is |
+| ------------- | ------------- | ------------- | ------------- | ------------- |------------- |
+| org_id  | Yes  | | The organization UUID |
+| name  | Yes  || The asset name |
+| asset_tags  | No  |[]| The tags of the asset  |
+| target  | No  || The url/package/IP address of the asset  |
+| sensitivity  | Yes  || The sensitivity of the asset  | none, low, medium, high, critical|
+| exposed  | Yes  || The expose of the asset  | public, private |
+| linked_assets  | No  |[]| linked assets to the given asset  |
+| invite  | No  |[]| invitation of the asset  |
+| add_users  | No  |[]| add users to asset  | 
+| asset_type  | Yes  || The type of the asset  | web, mobile, network, cloud |
+|**Network  asset**|
+| mac_address  | No  || The mac_address of the asset  |
+| hostname  | No  || The hostname of the asset  |
+| cpe | No  || The cpe of the asset  |
+| os  | No  || The OS of the asset  |
+|**Multiple IP Network  asset**|
+| target_list | Yes  |[]| The target_list is IP list of the asset |
+| exclude_ip_list | No  |[]| The exclude_ip_list is IP list to be excluded fron asset creation |
+|**Cloud  asset**|
+| cloud_type  | No  || The cloud type of the asset  |others, AWS, azure  |
+**Returns**
+
+```
+AssetResource
+```
+
 ### list_vulnerabilities
 
 **Expected**
