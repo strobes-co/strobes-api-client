@@ -42,7 +42,7 @@ class StrobesClient(BaseClient):
 
     def get_asset(self, org_id: str, asset_id: int) -> resources.AssetResource:
         r = self.s.get(
-            f"{self.app_url}api/v1/organizations/{org_id}/assets/" f"{str(asset_id)}/"
+            f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/"
         )
         check_status_code(r)
         return resources.AssetResource(r.json())
@@ -114,7 +114,7 @@ class StrobesClient(BaseClient):
     ) -> resources.AssetResource:
         patch_data: Dict[str, Union[str, int]] = {}
         r = self.s.get(
-            f"{self.app_url}api/v1/organizations/{org_id}/assets/" f"{str(asset_id)}/"
+            f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/"
         )
         check_status_code(r)
         asset_data = resources.AssetResource(r.json())
@@ -145,7 +145,7 @@ class StrobesClient(BaseClient):
             patch_data["ipaddress"] = asset_data.data.ipaddress
 
         r = self.s.patch(
-            f"{self.app_url}api/v1/organizations/{org_id}/assets/" f"{str(asset_id)}/",
+            f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/",
             json=patch_data,
         )
         check_status_code(r)
@@ -245,7 +245,7 @@ class StrobesClient(BaseClient):
 
     def search_cve(self, org_id: str, search_term: str) -> resources.CVEListResource:
         r = self.s.get(
-            f"{self.app_url}api/v1/organizations/{org_id}/cve/?q=" f"{search_term}"
+            f"{self.app_url}api/v1/organizations/{org_id}/cve/?q={search_term}"
         )
         check_status_code(r)
 
