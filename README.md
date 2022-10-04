@@ -131,6 +131,7 @@ AssetResource
 | linked_assets  | No  |[]| linked assets to the given asset  |
 | invite  | No  |[]| invitation of the asset  |
 | add_users  | No  |[]| add users to asset  | 
+| asset_tags  | No  |[]| The tags of the asset  | |
 | asset_type  | Yes  || The type of the asset  | web, mobile, network, cloud |
 |**Network  asset**|
 | mac_address  | No  || The mac_address of the asset  |
