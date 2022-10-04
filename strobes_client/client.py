@@ -12,7 +12,7 @@ class StrobesClient(BaseClient):
         super().__init__(*args, **kwargs)
 
     def list_organizations(self, page: int = 1) -> resources.OrganizationListResource:
-        r = self.s.get(f"{self.app_url}api/v1/organizations/?page={str(page)}")
+        r = self.s.get(f"{self.app_url}api/v1/organizations/?page={page}")
         check_status_code(r)
         return resources.OrganizationListResource(r.json())
 
@@ -29,14 +29,14 @@ class StrobesClient(BaseClient):
             for t in asset_type:
                 qs += f"type[]={t}&"
             r = self.s.get(
-                f"{self.app_url}api/v1/organizations/{org_id}/assets/?page="
-                f"{str(page)}{qs}"
+                f"{self.app_url}api/v1/organizations/{org_id}/assets/?page={page}{qs}"
             )
+
         else:
             r = self.s.get(
-                f"{self.app_url}api/v1/organizations/{org_id}/assets/?page="
-                f"{str(page)}"
+                f"{self.app_url}api/v1/organizations/{org_id}/assets/?page={page}"
             )
+
         check_status_code(r)
         return resources.AssetListResource(r.json())
 
@@ -118,32 +118,12 @@ class StrobesClient(BaseClient):
         )
         check_status_code(r)
         asset_data = resources.AssetResource(r.json())
-        if name:
-            patch_data["name"] = name
-        else:
-            patch_data["name"] = asset_data.name
-        if exposed:
-            patch_data["exposed"] = exposed
-        else:
-            patch_data["exposed"] = asset_data.exposed
-        if mac_address:
-            patch_data["mac_address"] = mac_address
-        else:
-            patch_data["mac_address"] = asset_data.data.mac_address
-        if hostname:
-            patch_data["hostname"] = hostname
-        else:
-            patch_data["hostname"] = asset_data.data.hostname
-
-        if sensitivity:
-            patch_data["sensitivity"] = sensitivity
-        else:
-            patch_data["sensitivity"] = asset_data.sensitivity
-        if ipaddress:
-            patch_data["ipaddress"] = ipaddress
-        else:
-            patch_data["ipaddress"] = asset_data.data.ipaddress
-
+        patch_data["name"] = name or asset_data.name
+        patch_data["exposed"] = exposed or asset_data.exposed
+        patch_data["mac_address"] = mac_address or asset_data.data.mac_address
+        patch_data["hostname"] = hostname or asset_data.data.hostname
+        patch_data["sensitivity"] = sensitivity or asset_data.sensitivity
+        patch_data["ipaddress"] = ipaddress or asset_data.data.ipaddress
         r = self.s.patch(
             f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/",
             json=patch_data,
@@ -185,9 +165,9 @@ class StrobesClient(BaseClient):
                 cve_id = cve_data[0].id
                 qs += f"cve[]={str(cve_id)}"
         r = self.s.get(
-            f"{self.app_url}api/v1/organizations/{org_id}/bugs/?page="
-            f"{str(page)}{qs}"
+            f"{self.app_url}api/v1/organizations/{org_id}/bugs/?page={page}{qs}"
         )
+
         check_status_code(r)
         return resources.VulnerabilityListResource(r.json())
 
@@ -195,9 +175,9 @@ class StrobesClient(BaseClient):
         self, org_id: str, asset_id: int, vulnerability_id: int
     ) -> resources.VulnerabilityResource:
         r = self.s.get(
-            f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/"
-            f"bugs/{str(vulnerability_id)}/"
+            f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/bugs/{vulnerability_id}/"
         )
+
         check_status_code(r)
 
         return resources.VulnerabilityResource(r.json())
@@ -229,17 +209,17 @@ class StrobesClient(BaseClient):
             patch_data["title"] = title
         if vulnerable_id or aws_category or region:
             patch_data["cloud"] = {}
-            if vulnerable_id:
-                patch_data["cloud"]["vulnerable_id"] = vulnerable_id
-            if aws_category:
-                patch_data["cloud"]["aws_category"] = aws_category
-            if region:
-                patch_data["cloud"]["region"] = region
+        if vulnerable_id:
+            patch_data["cloud"]["vulnerable_id"] = vulnerable_id
+        if aws_category:
+            patch_data["cloud"]["aws_category"] = aws_category
+        if region:
+            patch_data["cloud"]["region"] = region
         r = self.s.patch(
-            f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/"
-            f"bugs/{str(vulnerability_id)}/",
+            f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/bugs/{vulnerability_id}/",
             json=patch_data,
         )
+
         check_status_code(r)
         return resources.VulnerabilityResource(r.json())
 
@@ -255,14 +235,12 @@ class StrobesClient(BaseClient):
         self, org_id: str, asset_id: int, vulnerability_id: int, bug_tags: List[str]
     ) -> resources.VulnerabilityResource:
         r1 = self.get_vulnerability(org_id, asset_id, vulnerability_id)
-        for tag in r1.bug_tags:
-            bug_tags.append(tag["name"])
-
+        bug_tags.extend(tag["name"] for tag in r1.bug_tags)
         r2 = self.s.post(
-            f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/"
-            f"bugs/{str(vulnerability_id)}/tags/",
+            f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/bugs/{vulnerability_id}/tags/",
             json={"tag_list": bug_tags},
         )
+
         check_status_code(r2)
         return resources.VulnerabilityResource(r2.json())
 
@@ -309,33 +287,32 @@ class StrobesClient(BaseClient):
         severity: int,
         **kwargs,
     ) -> resources.VulnerabilityResource:
-        post_data: Dict[str, Union[str, int]] = {}
+        post_data: Dict[str, Union[str, int]] = {
+            "title": title,
+            "description": description,
+            "mitigation": mitigation,
+            "steps_to_reproduce": steps_to_reproduce,
+            "severity": severity,
+            "cve_list": kwargs.get("cve_list", []),
+            "cwe_list": kwargs.get("cwe_list", []),
+        }
 
-        post_data["title"] = title
-        post_data["description"] = description
-        post_data["mitigation"] = mitigation
-        post_data["steps_to_reproduce"] = steps_to_reproduce
-        post_data["severity"] = severity
-        post_data["cve_list"] = kwargs.get("cve_list", [])
-        post_data["cwe_list"] = kwargs.get("cwe_list", [])
 
         if vulnerability_type == VulnerabilityTypeEnum.code.value:
             post_data["bug_level"] = VulnerabilityTypeEnum.code_bug_level.value
             post_data["code"] = {}
-            post_data["code"]["vulnerable_code"] = kwargs.get("vulnerable_code", None)
-            post_data["code"]["start_line_number"] = kwargs.get(
-                "start_line_number", None
-            )
-            post_data["code"]["column_number"] = kwargs.get("column_number", None)
-            post_data["code"]["file_name"] = kwargs.get("file_name", None)
-            post_data["code"]["end_line_number"] = kwargs.get("end_line_number", None)
-            post_data["code"]["end_column"] = kwargs.get("end_column", None)
+            post_data["code"]["vulnerable_code"] = kwargs.get("vulnerable_code")
+            post_data["code"]["start_line_number"] = kwargs.get("start_line_number")
+            post_data["code"]["column_number"] = kwargs.get("column_number")
+            post_data["code"]["file_name"] = kwargs.get("file_name")
+            post_data["code"]["end_line_number"] = kwargs.get("end_line_number")
+            post_data["code"]["end_column"] = kwargs.get("end_column")
 
         if vulnerability_type == VulnerabilityTypeEnum.web.value:
             post_data["bug_level"] = VulnerabilityTypeEnum.web_bug_level.value
             post_data["web"] = {}
-            post_data["web"]["request"] = kwargs.get("request", None)
-            post_data["web"]["response"] = kwargs.get("response", None)
+            post_data["web"]["request"] = kwargs.get("request")
+            post_data["web"]["response"] = kwargs.get("response")
             post_data["web"]["affected_endpoints"] = kwargs.get(
                 "affected_endpoints", []
             )
@@ -343,28 +320,24 @@ class StrobesClient(BaseClient):
         if vulnerability_type == VulnerabilityTypeEnum.network.value:
             post_data["bug_level"] = VulnerabilityTypeEnum.network_bug_level.value
             post_data["network"] = {}
-            post_data["network"]["port_address"] = kwargs.get("port_address", None)
-            post_data["network"]["cpe"] = kwargs.get("cpe", None)
-            post_data["network"]["os"] = kwargs.get("os", None)
+            post_data["network"]["port_address"] = kwargs.get("port_address")
+            post_data["network"]["cpe"] = kwargs.get("cpe")
+            post_data["network"]["os"] = kwargs.get("os")
 
         if vulnerability_type == VulnerabilityTypeEnum.cloud.value:
             post_data["bug_level"] = VulnerabilityTypeEnum.cloud_bug_level.value
             post_data["cloud"] = {}
-            post_data["cloud"]["region"] = kwargs.get("region", None)
-            post_data["cloud"]["vulnerable_id"] = kwargs.get("vulnerable_id", None)
-            post_data["cloud"]["aws_category"] = kwargs.get("aws_category", None)
+            post_data["cloud"]["region"] = kwargs.get("region")
+            post_data["cloud"]["vulnerable_id"] = kwargs.get("vulnerable_id")
+            post_data["cloud"]["aws_category"] = kwargs.get("aws_category")
 
         if vulnerability_type == VulnerabilityTypeEnum.package.value:
             post_data["bug_level"] = VulnerabilityTypeEnum.package_bug_level.value
             post_data["package"] = {}
-            post_data["package"]["installed_version"] = kwargs.get(
-                "installed_version", None
-            )
-            post_data["package"]["fixed_version"] = kwargs.get("fixed_version", None)
-            post_data["package"]["package_name"] = kwargs.get("package_name", None)
-            post_data["package"]["affected_versions"] = kwargs.get(
-                "affected_versions", None
-            )
+            post_data["package"]["installed_version"] = kwargs.get("installed_version")
+            post_data["package"]["fixed_version"] = kwargs.get("fixed_version")
+            post_data["package"]["package_name"] = kwargs.get("package_name")
+            post_data["package"]["affected_versions"] = kwargs.get("affected_versions")
 
         r = self.s.post(
             f"{self.app_url}api/v1/organizations/{org_id}/assets/{asset_id}/bugs/",

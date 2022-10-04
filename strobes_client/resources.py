@@ -10,9 +10,7 @@ class OrganizationResource:
         keys = ["id", "name"]
         if is_check_keys:
             check_keys(response_data, keys)
-        to_deserialize = {}
-        for k in keys:
-            to_deserialize[k] = response_data[k]
+        to_deserialize = {k: response_data[k] for k in keys}
         self.__dict__ = to_deserialize
 
 
@@ -22,12 +20,14 @@ class OrganizationListResource:
 
     def __init__(self, response_data={}, is_check_keys=False):
         keys = ["results", "count"]
-        to_deserialize = {}
         if is_check_keys:
             check_keys(response_data, keys)
-        to_deserialize["results"] = []
-        for org in response_data["results"]:
-            to_deserialize["results"].append(OrganizationResource(org))
+        to_deserialize = {
+            "results": [
+                OrganizationResource(org) for org in response_data["results"]
+            ]
+        }
+
         self.__dict__ = to_deserialize
 
 
@@ -40,14 +40,11 @@ class AssetInfoResource:
     mac_address: str = ""
 
     def __init__(self, response_data={}, is_check_keys=False):
-        keys = ["os", "cpe", "netbios", "hostname", "ipaddress", "mac_address"]
-        to_deserialize = {}
         if response_data:
+            keys = ["os", "cpe", "netbios", "hostname", "ipaddress", "mac_address"]
             if is_check_keys:
                 check_keys(response_data, keys)
-            for k in keys:
-                if k in response_data:
-                    to_deserialize[k] = response_data[k]
+            to_deserialize = {k: response_data[k] for k in keys if k in response_data}
             self.__dict__ = to_deserialize
 
 
@@ -76,13 +73,15 @@ class AssetResource:
             "linked_assets",
             "data",
         ]
-        to_deserialize = {}
         if is_check_keys:
             check_keys(response_data, keys)
         if response_data.get("data"):
-            to_deserialize["data"] = AssetInfoResource(
-                response_data["data"], is_check_keys=False
-            )
+            to_deserialize = {
+                "data": AssetInfoResource(
+                    response_data["data"], is_check_keys=False
+                )
+            }
+
             del response_data["data"]
             keys.remove("data")
             for k in keys:
@@ -96,12 +95,12 @@ class AssetListResource:
 
     def __init__(self, response_data={}, is_check_keys=False):
         keys = ["results", "count"]
-        to_deserialize = {}
         if is_check_keys:
             check_keys(response_data, keys)
-        to_deserialize["results"] = []
-        for asset in response_data["results"]:
-            to_deserialize["results"].append(AssetResource(asset))
+        to_deserialize = {
+            "results": [AssetResource(asset) for asset in response_data["results"]]
+        }
+
         to_deserialize["count"] = response_data["count"]
         self.__dict__ = to_deserialize
 
@@ -112,13 +111,11 @@ class VulnerabilityExtraInfoResource:
     cpe: str = ""
 
     def __init__(self, response_data={}, is_check_keys=False):
-        keys = ["os", "port", "cpe"]
-        to_deserialize = {}
         if response_data:
+            keys = ["os", "port", "cpe"]
             if is_check_keys:
                 check_keys(response_data, keys)
-            for k in keys:
-                to_deserialize[k] = response_data[k]
+            to_deserialize = {k: response_data[k] for k in keys}
             self.__dict__ = to_deserialize
 
 
@@ -179,12 +176,12 @@ class VulnerabilityListResource:
 
     def __init__(self, response_data={}, is_check_keys=False):
         keys = ["results", "count"]
-        to_deserialize = {}
         if is_check_keys:
             check_keys(response_data, keys)
-        to_deserialize["results"] = []
-        for v in response_data["results"]:
-            to_deserialize["results"].append(VulnerabilityResource(v))
+        to_deserialize = {
+            "results": [VulnerabilityResource(v) for v in response_data["results"]]
+        }
+
         to_deserialize["count"] = response_data["count"]
         self.__dict__ = to_deserialize
 
@@ -196,9 +193,7 @@ class CVEResource:
 
     def __init__(self, response_data={}, is_check_keys=False):
         keys = ["id", "cve_id", "cvss"]
-        to_deserialize = {}
-        for k in keys:
-            to_deserialize[k] = response_data[k]
+        to_deserialize = {k: response_data[k] for k in keys}
         self.__dict__ = to_deserialize
 
 
@@ -208,12 +203,12 @@ class CVEListResource:
 
     def __init__(self, response_data={}, is_check_keys=False):
         keys = ["results", "count"]
-        to_deserialize = {}
         if is_check_keys:
             check_keys(response_data, keys)
-        to_deserialize["results"] = []
-        for cve in response_data["results"]:
-            to_deserialize["results"].append(CVEResource(cve))
+        to_deserialize = {
+            "results": [CVEResource(cve) for cve in response_data["results"]]
+        }
+
         to_deserialize["count"] = response_data["count"]
         self.__dict__ = to_deserialize
 
@@ -225,11 +220,9 @@ class ScanConfigResource:
 
     def __init__(self, response_data={}, is_check_keys=False):
         keys = ["id", "name", "connector_type"]
-        to_deserialize = {}
         if is_check_keys:
             check_keys(response_data, keys)
-        for k in keys:
-            to_deserialize[k] = response_data[k]
+        to_deserialize = {k: response_data[k] for k in keys}
         self.__dict__ = to_deserialize
 
 
@@ -238,12 +231,12 @@ class ScanConfigListResource:
 
     def __init__(self, response_data={}, is_check_keys=False):
         keys = ["results"]
-        to_deserialize = {}
         if is_check_keys:
             check_keys(response_data, keys)
-        to_deserialize["results"] = []
-        for config in response_data:
-            to_deserialize["results"].append(ScanConfigResource(config))
+        to_deserialize = {
+            "results": [ScanConfigResource(config) for config in response_data]
+        }
+
         self.__dict__ = to_deserialize
 
 
@@ -257,9 +250,7 @@ class TaskResource:
 
     def __init__(self, response_data={}, is_check_keys=False):
         keys = ["id", "organization_id", "bug_stats", "status", "logs", "task_id"]
-        to_deserialize = {}
         if is_check_keys:
             check_keys(response_data, keys)
-        for k in keys:
-            to_deserialize[k] = response_data[k]
+        to_deserialize = {k: response_data[k] for k in keys}
         self.__dict__ = to_deserialize
