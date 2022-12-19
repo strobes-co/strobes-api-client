@@ -8,6 +8,12 @@ def get_jwt_token(url: str, email: str, password: str) -> str:
     resp = r.json()
     if 'access' in resp:
         return resp['access']
+    if 'otp_type' in resp:
+        raw_otp = input('Enter OTP: ')
+        r = requests.post(f"{url}api/v2/verify-otp/", json={"email": email, "password": password, "otp": raw_otp})
+        resp = r.json()
+        if 'access' in resp:
+            return resp['access']
     raise LoginFailure
 
 
